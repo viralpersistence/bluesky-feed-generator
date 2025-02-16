@@ -37,6 +37,13 @@ def should_ignore_post(record: 'models.AppBskyFeedPost.Record') -> bool:
 
     return False
 
+KEYWORDS = {
+    "covid",
+    "long covid",
+    "me/cfs",
+    "mcas",
+    "pots",
+}
 
 def operations_callback(ops: defaultdict) -> None:
     # Here we can filter, process, run ML classification, etc.
@@ -55,6 +62,7 @@ def operations_callback(ops: defaultdict) -> None:
         inlined_text = record.text.replace('\n', ' ')
 
         # print all texts just as demo that data stream works
+        '''
         logger.debug(
             f'NEW POST '
             f'[CREATED_AT={record.created_at}]'
@@ -63,12 +71,13 @@ def operations_callback(ops: defaultdict) -> None:
             f'[WITH_VIDEO={post_with_video}]'
             f': {inlined_text}'
         )
+        '''
 
         if should_ignore_post(record):
             continue
 
         # only python-related posts
-        if 'python' in record.text.lower():
+        if any(keyword in record.text.lower() for keyword in KEYWORDS):
             reply_root = reply_parent = None
             if record.reply:
                 reply_root = record.reply.root.uri
@@ -81,6 +90,15 @@ def operations_callback(ops: defaultdict) -> None:
                 'reply_root': reply_root,
             }
             posts_to_create.append(post_dict)
+
+            logger.debug(
+                f'NEW POST '
+                f'[CREATED_AT={record.created_at}]'
+                f'[AUTHOR={author}]'
+                f'[WITH_IMAGE={post_with_images}]'
+                f'[WITH_VIDEO={post_with_video}]'
+                f': {inlined_text}'
+            )
 
     posts_to_delete = ops[models.ids.AppBskyFeedPost]['deleted']
     if posts_to_delete:

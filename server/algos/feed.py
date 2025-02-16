@@ -3,12 +3,15 @@ from typing import Optional
 
 from server import config
 from server.database import Post
+from server.logger import logger
 
 uri = config.FEED_URI
 CURSOR_EOF = 'eof'
 
 
 def handler(cursor: Optional[str], limit: int) -> dict:
+    logger.debug('here')
+    
     posts = Post.select().order_by(Post.cid.desc()).order_by(Post.indexed_at.desc()).limit(limit)
 
     if cursor:
