@@ -20,7 +20,7 @@ from server.data_filter import operations_callback
 logger.info("3")
 
 app = Flask(__name__)
-
+'''
 try:
     stream_stop_event = threading.Event()
     stream_thread = threading.Thread(
@@ -40,7 +40,7 @@ def sigint_handler(*_):
 
 
 signal.signal(signal.SIGINT, sigint_handler)
-
+'''
 
 @app.route('/')
 def index():
