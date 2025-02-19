@@ -52,6 +52,8 @@ def operations_callback(ops: defaultdict) -> None:
 
     # for example, let's create our custom feed that will contain all posts that contains alf related text
 
+    logger.info("is this even happening")
+
     posts_to_create = []
     for created_post in ops[models.ids.AppBskyFeedPost]['created']:
         author = created_post['author']

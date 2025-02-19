@@ -10,8 +10,8 @@ CURSOR_EOF = 'eof'
 
 
 def handler(cursor: Optional[str], limit: int) -> dict:
-    logger.debug('here')
-    
+    logger.info("****THIS HAPPENS4*******")
+
     posts = Post.select().order_by(Post.cid.desc()).order_by(Post.indexed_at.desc()).limit(limit)
 
     if cursor:

@@ -5,18 +5,32 @@ import threading
 from server import config
 from server import data_stream
 
+from server.logger import logger
+logger.info("0")
+
 from flask import Flask, jsonify, request
 
+logger.info("1")
+
 from server.algos import algos
+
+logger.info("2")
 from server.data_filter import operations_callback
+
+logger.info("3")
 
 app = Flask(__name__)
 
-stream_stop_event = threading.Event()
-stream_thread = threading.Thread(
-    target=data_stream.run, args=(config.SERVICE_DID, operations_callback, stream_stop_event,)
-)
-stream_thread.start()
+try:
+    stream_stop_event = threading.Event()
+    stream_thread = threading.Thread(
+        target=data_stream.run, args=(config.SERVICE_DID, operations_callback, stream_stop_event,)
+    )
+    stream_thread.start()
+
+    logger.info("4")
+except:
+    logger.info("failed")
 
 
 def sigint_handler(*_):
@@ -30,6 +44,7 @@ signal.signal(signal.SIGINT, sigint_handler)
 
 @app.route('/')
 def index():
+    logger.info("????")
     return 'ATProto Feed Generator powered by The AT Protocol SDK for Python (https://github.com/MarshalX/atproto).'
 
 
