@@ -1,1 +1,0 @@
-web gunicorn lcmesky_catchup_wsgi:application
